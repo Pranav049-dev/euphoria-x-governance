@@ -1,26 +1,33 @@
-# Euphoria X — Brand Governance Before You Publish
+# Euphoria X — Backend foundation
 
-An interactive brand governance, compliance, and workflow engine to review copy, validate tone and messaging, track revisions, and manage publication sign-offs before content goes live.
+This starter adds a Flask API and SQLAlchemy database to the existing Euphoria X HTML prototype.
 
-## ✨ Features
+## Database tables
+- `project`: current draft, format, status and display settings.
+- `revision`: durable submitted snapshots with finding counts and submitter role.
+- `activity`: comments, submissions, decisions and restore events.
 
-- **Live Brand Rule Engine:** Real-time flagging of copy against brand voice, claims, accessibility, forbidden terms, and specifications.
-- **Severity-Based Triage:** Color-coded severity tiers (High, Medium, Low) with automated approval restrictions.
-- **Role-Based Workflow:** Multi-role governance (`Contributor`, `Reviewer`, `Authorized Reviewer`) with comment threads and audit logging.
-- **Revision History:** Instant revision snapshots with one-click restore capabilities.
-- **Analytics & Insights:** Recurring issues breakdown and ambiguous guideline alerts based on override rates.
-- **Themeable & Responsive:** Modern responsive layout with Light, Dark, Ocean, Sunset, and Forest themes.
+## Run locally (Windows PowerShell)
 
-## 🚀 Getting Started
-
-Simply open `index.html` in any modern web browser or serve it with Python:
-
-```bash
-python3 -m http.server 8000
+```powershell
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+py -m pip install -r requirements.txt
+py app.py
 ```
 
-Then visit [http://localhost:8000](http://localhost:8000).
+Open http://127.0.0.1:5000 and test http://127.0.0.1:5000/api/health.
 
-## 📄 License
+The SQLite database is created automatically as `instance/euphoria_x.db` inside the project folder.
 
-MIT
+## API routes
+- `GET /api/health`
+- `GET /api/project`
+- `PUT /api/project`
+- `POST /api/project/revisions`
+- `POST /api/project/activities`
+- `POST /api/project/decision`
+- `POST /api/project/restore/<revision_id>`
+
+## Important current boundary
+This is the persistence foundation, not the finished secure multi-user system. The current prototype's role selector is not authentication. Before public multi-user use, add sign-in, server-verified permissions, CSRF protection and production database configuration. The `DATABASE_URL` setting is already supported so SQLite can later be switched to PostgreSQL without rewriting the models.
